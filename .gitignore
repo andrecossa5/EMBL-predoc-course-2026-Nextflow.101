@@ -81,7 +81,6 @@ Thumbs.db
 *.fastq.gz
 *.fq
 *.fq.gz
-*.h5ad
 *.h5
 *.mtx
 *.gz
