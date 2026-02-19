@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 # Parse arguments
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Preprocessing script for scRNA-seq data')
-    
+
     # Required arguments
     parser.add_argument('--input', '-i', required=True,
                         help='Input directory path containing QC.h5ad file')
-    
+
     # Optional arguments with defaults
     parser.add_argument('--n_hvgs', type=int, default=2000,
                         help='Number of highly variable genes (default: 2000)')
@@ -48,7 +48,7 @@ def parse_arguments():
                         help='Threshold for gene filtering as fraction of cells (default: 0.001)')
     parser.add_argument('--resolution', type=float, default=0.5,
                         help='Resolution parameter for Leiden clustering (default: 0.5)')
-    
+
     return parser.parse_args()
 
 
@@ -75,28 +75,29 @@ thr = args.gene_threshold
 resolution = args.resolution
 
 # Read data
+path_input = '/Users/cossa/Desktop/projects/EMBL_course_2026/nextflow_1.0.1/pipeline-3-advanced/work/82/4125c46474cb9974da13bff17304cc/concatenated.h5ad'
 adata = sc.read(path_input)
 
 # Compute QC metrics
-adata.obs['n_UMIs'] = adata.X.sum(axis=1).A1
-adata.obs['n_genes'] = (adata.X > 0).sum(axis=1).A1
-mt_counts = adata[:, adata.var_names.str.startswith('MT-')].X.sum(axis=1).A1
-total_counts = adata.X.sum(axis=1).A1
+adata.obs['n_UMIs'] = adata.X.sum(axis=1)
+adata.obs['n_genes'] = (adata.X > 0).sum(axis=1)
+mt_counts = adata[:, adata.var_names.str.startswith('MT-')].X.sum(axis=1)
+total_counts = adata.X.sum(axis=1)
 adata.obs['percent_mt'] = mt_counts / total_counts
 
 # Filter cells and genes
 test = (
-    (adata.obs['n_UMIs'] >= min_umis) & 
-    (adata.obs['n_UMIs'] <= max_umis) & 
-    (adata.obs['n_genes'] >= min_genes) & 
-    (adata.obs['n_genes'] <= max_genes) & 
+    (adata.obs['n_UMIs'] >= min_umis) &
+    (adata.obs['n_UMIs'] <= max_umis) &
+    (adata.obs['n_genes'] >= min_genes) &
+    (adata.obs['n_genes'] <= max_genes) &
     (adata.obs['percent_mt'] <= max_percent_mt)
 )
 adata = adata[test, :].copy()
 
 # Refilter genes, at least expressed in 0.1% of cells
 cell_threshold = thr * adata.n_obs
-test = (adata.X > 0).sum(axis=0).A1 >= cell_threshold
+test = (adata.X > 0).sum(axis=0) >= cell_threshold
 adata = adata[:, test].copy()
 
 # Preprocess
