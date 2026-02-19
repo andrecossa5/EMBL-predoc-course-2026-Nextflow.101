@@ -1,4 +1,4 @@
-# Pipeline 3: Advanced scRNA-seq Data Concatenation
+# Pipeline 3: scRNA-seq data pre-processing
 
 This pipeline demonstrates advanced Nextflow concepts for single-cell RNA-seq data handling, focusing on reading multiple MTX files from a manifest and concatenating them into a single analysis-ready dataset.
 
@@ -19,7 +19,7 @@ The pipeline implements a streamlined workflow that:
 
 - **Format**: Matrix Market (mtx) directories containing:
   - `matrix.mtx`: Count matrix (Market Matrix format)
-  - `barcodes.tsv`: Cell barcodes  
+  - `barcodes.tsv`: Cell barcodes
   - `features.tsv` or `genes.tsv`: Gene features/names
 - **Manifest**: CSV file with columns:
   - `sample`: Sample identifier
@@ -171,7 +171,7 @@ pipeline-3-advanced/
 **Expected Outputs**:
 - Individual processed h5ad files with normalized, filtered data
 - Concatenated h5ad file with all samples and sample covariates
-- QC plots (PCA and UMAP visualizations)  
+- QC plots (PCA and UMAP visualizations)
 - Analysis reports
 
 ### Exercise 2: Parameter Grid Exploration
@@ -206,7 +206,7 @@ pipeline-3-advanced/
 
 **Parameter Grid Variables**:
 - `n_neighbors`: [10, 15, 20, 30]
-- `n_pcs`: [20, 30, 40, 50] 
+- `n_pcs`: [20, 30, 40, 50]
 - `n_hvgs`: [1000, 2000, 3000, 4000]
 - `resolution`: [0.1, 0.3, 0.5, 0.8, 1.0]
 
@@ -343,7 +343,7 @@ python bin/concatenate.py --manifest data/manifest.csv --output test.h5ad
 
 This pipeline serves as a foundation for advanced scRNA-seq workflows. Contributions welcome for:
 - Additional preprocessing modules
-- Integration with other single-cell tools  
+- Integration with other single-cell tools
 - Performance optimizations
 - Documentation improvements
 - Test data and examples
